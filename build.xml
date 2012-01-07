@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ====================================================================== 
+     2012.01.07. 14:40:57                                                        
+
+     Bumerang    
+     Bumeráng letöltő alkalmazás
+                   
+     manfreed                                                                
+     ====================================================================== -->
+<project name="Bumerang" default="default">
+    <description>
+            Bumeráng letöltő alkalmazás
+    </description>
+
+    <!-- ================================= 
+          target: default              
+         ================================= -->
+    <target name="default" description="Bumeráng letöltő alkalmazás">
+    	<mkdir dir="build/classes"/>
+    	<javac includeantruntime="false" srcdir="src" destdir="build/classes"/>
+        <mkdir dir="build/jar"/>
+    	<jar destfile="build/jar/bumerang.jar" basedir="build/classes">
+    		<manifest>
+  				<attribute name="Main-Class" value = "Bumerang" />
+    		</manifest>
+    	</jar>
+    	<copy file="build/jar/bumerang.jar" tofile="./bumerang.jar"/>
+    	<delete dir="build"/>
+    </target>
+
+</project>
