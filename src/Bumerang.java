@@ -29,7 +29,10 @@ public class Bumerang {
 		CommandLineParser opt = new CommandLineParser(args);
 				
 		// Ha a záró dátum nincs megadva
-		if (opt.endDate == null) opt.endDate = opt.startDate;
+		if (opt.endDate == null) {
+			opt.endDate = opt.startDate;
+			opt.endPart = opt.startPart;
+		}
 		
 		// Aktuális dátum
 		GregorianCalendar date = (GregorianCalendar) opt.startDate.clone();
@@ -56,7 +59,7 @@ public class Bumerang {
 				System.out.println("[ OK ]");
 
 				BumerangPiece[] pieces = episode.getPieces();
-
+	
 				// Létrehozzuk neki a mappát
 				File folder = new File(formattedDate);
 				
@@ -64,25 +67,25 @@ public class Bumerang {
 					System.err.println("Hiba a mappa létrehozása során:" + formattedDate);
 					break;
 				}			
-				
+			
 				for (final BumerangPiece piece: pieces) {
 					
 					// Ha meg van határozva hányadik darabtól kezdjük, az első
 					// nap kihagyjuk az az előttieket
-					if (date.equals(opt.startDate) && opt.startPart != null) {
-						System.out.println("Kihagy: " + piece.id);
-						if (opt.startPart > piece.id) continue;
+					if (date.equals(opt.startDate) && opt.startPart != null && opt.startPart > piece.id) {
+						System.out.println(String.format("%2d - %s (kihagy)", piece.id, piece.title));
+						continue;
 					}
 					// Ha meg van határozva hányadik darabbal fejezzük be, az utolsó
 					// nap kihagyjuk az az utániakat
-					if (date.equals(opt.startDate) && opt.startPart != null) {
-						System.out.println("Kihagy: " + piece.id);
-						if (opt.endPart < piece.id) continue;
+					if (date.equals(opt.endDate) && opt.endPart != null && opt.endPart < piece.id) {
+						System.out.println(String.format("%2d - %s (kihagy)", piece.id, piece.title));
+						continue;
 					}
 					
 					if (piece.url == null) {
 						System.err.println(String.format("%2d %s", piece.id, "Hiba: Az url-t nem lehetett megfejteni."));
-						break;
+						continue;
 					}
 					
 					String fileName = String.format("%02d. %s.mp3", piece.id, piece.title);
@@ -113,6 +116,5 @@ public class Bumerang {
 			}
 			date.add(Calendar.DATE, 1);
 		}
-		
 	}
 }
