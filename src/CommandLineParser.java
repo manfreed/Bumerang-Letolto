@@ -60,12 +60,6 @@ public class CommandLineParser {
 
 					if (setStartDate) {
 						startDate = new GregorianCalendar(year, month-1, day);
-						System.out.println(
-							String.format(
-								"%d csoport, %s, %s, %s, %s, %s",
-								m.groupCount(), m.group(1), m.group(2), m.group(3), m.group(4), m.group(5)
-							)
-						);
 						if (m.group(5) != null) startPart = Integer.parseInt(m.group(5));
 						setStartDate = false;
 						continue;
