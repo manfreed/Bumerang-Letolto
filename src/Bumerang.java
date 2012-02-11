@@ -17,6 +17,7 @@
  *  
  */
 
+import java.awt.font.NumericShaper;
 import java.io.File;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -24,7 +25,7 @@ import java.util.GregorianCalendar;
 public class Bumerang {
 
 	public static void main(String[] args) {
-
+		
 		// Paraméterek feldolgozása
 		CommandLineParser opt = new CommandLineParser(args);
 				
@@ -96,7 +97,7 @@ public class Bumerang {
 							
 							System.out.print(
 								String.format(
-									"\r%2d - %s (%d/%d) - %.2f%%",
+									"\r%2d - %s (%,d/%,d) - %.2f%%",
 									piece.id,
 									piece.title,
 									getDownloaded(),

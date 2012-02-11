@@ -31,7 +31,7 @@ import java.util.regex.Pattern;
 
 public class BumerangEpisode {
 	
-	private static final String ILLEGAL_CHARACTERS = "(/|\r|\t|\0|\f|`|\\||\\\\|:|\\*)";
+	private static final String ILLEGAL_CHARACTERS = "(/|\r|\t|\0|\f|`|\\||\\\\|:|\\*|\\?|\\!)";
 	private int year, month, day;
 	private ArrayList<BumerangPiece> pieces = new ArrayList<BumerangPiece>();
 	private String errorString = "OK";
@@ -96,9 +96,11 @@ public class BumerangEpisode {
 			Matcher titleMatcher = titlePattern.matcher(htmlPieces[i]);
 			
 			if (titleMatcher.find()) {
-				piece.title = titleMatcher.group(2);
-				piece.title.replaceAll("<br.*?>", "\n"); // HTML sortörések
-				piece.title.replaceAll(ILLEGAL_CHARACTERS, "");
+				piece.title = 
+						titleMatcher.group(2)
+						.replaceAll("<br.*?>", "\n")
+						.replaceAll(ILLEGAL_CHARACTERS, "");
+				piece.title = decodeHtmlEntities(piece.title);
 			}
 			else {
 				piece.title = "N/A";
@@ -110,6 +112,38 @@ public class BumerangEpisode {
 
 			pieces.add(piece);
 		}
+	}
+
+	private String decodeHtmlEntities(String text) {
+		
+		StringBuilder result = new StringBuilder();
+		for (int i=0; i<text.length(); i++) {
+			
+			char c = text.charAt(i);
+			
+			if (c == '&') {
+				int end = text.indexOf(';', i+1);
+				if (end != -1) {
+					String token = text.substring(i+1, end);
+					if (token.indexOf('#') == 0) {
+						try {
+							char decodedChar = (char)Integer.decode(token.substring(1)).intValue();
+							result.append(decodedChar);
+							i+=token.length()+1;
+						} catch (NumberFormatException e) {
+							result.append(c);
+						}
+					} else {
+						result.append(c);
+					}
+				} else {
+					result.append(c);
+				}
+			} else {
+				result.append(c);
+			}
+		}
+		return result.toString();
 	}
 
 	public BumerangPiece[] getPieces() {
