@@ -60,12 +60,12 @@ public class CommandLineParser {
 
 					if (setStartDate) {
 						startDate = new GregorianCalendar(year, month-1, day);
-						if (m.groupCount() > 5) startPart = Integer.parseInt(m.group(4));
+						if (m.group(5) != null) startPart = Integer.parseInt(m.group(5));
 						setStartDate = false;
 						continue;
 					} else {
 						endDate = new GregorianCalendar(year, month-1, day);
-						if (m.groupCount() > 5) endPart = Integer.parseInt(m.group(4));
+						if (m.group(5) != null) endPart = Integer.parseInt(m.group(5));
 						setEndDate = false;
 						continue;
 					}
